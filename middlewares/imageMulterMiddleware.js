@@ -11,7 +11,7 @@
 
  const fileFilter = (req,file,cb)=>{
   //img with png,jpg,jpeg
-  if(file.mimetype=='image/png' ||file.mimetype=='image/jpg' ||file.mimetype=='image/jpeg' ){
+  if(file.mimetype=='image/png' ||'image/jpg' ||'image/jpeg' ){
     cb(null,true)
   }else{
     cb(null,false)

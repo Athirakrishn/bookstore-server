@@ -15,11 +15,17 @@ const multerConfig = require('../middlewares/imageMulterMiddleware')
  //Google-login
  router.post('/google-login',useController.googleLoginController)
 
- //add-book
+
  //addBook
-router.post('/add-book',jwtMiddleware,multerConfig.array('uploadImages',3),bookController.addBookController)
+router.post('/add-books',jwtMiddleware,multerConfig.array('uploadImages',3),bookController.addBookController)
 
 //home-books
-router.get('/home-books',bookController.getHomeBooks)
+router.get('/home-books',bookController.getHomeBooksController)
+
+//all-books
+router.get('/all-books',jwtMiddleware,bookController.getAllBooksController)
+
+//view-book
+router.get('/books/:id/view',jwtMiddleware,bookController.viewBookController)
 
  module.exports=router
