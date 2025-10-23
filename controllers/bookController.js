@@ -73,7 +73,41 @@ exports.viewBookController = async (req,res)=>{
     }
 }
 
-//  uploadImg,
-//     status,
-//     userMail,
-//     bought
+
+//get all user books 
+exports.getAllUserBookController = async (req,res)=>{
+    console.log("Inside getAllUserController ");
+    const email = req.payload
+    try{
+        const allUserBooks = await books.find({userMail:email})
+        res.status(200).json(allUserBooks)
+    }catch(err){
+        res.status(500).json(err)
+    }
+}
+
+//get all user bought books 
+exports.getAllUserBoughtController = async (req,res)=>{
+    console.log("Inside getAllUserBoughtController ");
+    const email = req.payload
+    try{
+        const allUserBoughtBooks = await books.find({bought:email})
+        res.status(200).json(allUserBoughtBooks)
+    }catch(err){
+        res.status(500).json(err)
+    }
+}
+
+//removing user upload books
+exports.deleteUserBookController = async (req,res)=>{
+    console.log("Inside deleteUserBookController");
+    //get book id
+    const { id } = req.params
+    console.log(id);
+    try{
+       await books.findByIdAndDelete({_id:id})
+       res.status(200).json("Book Deleted Successfully...")
+    }catch(err){
+        res.status(500).json(err)
+    }
+}
