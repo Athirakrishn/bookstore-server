@@ -3,6 +3,7 @@ const useController = require('../controllers/useController')
 const bookController = require('../controllers/bookController')
 const jwtMiddleware = require('../middlewares/jwtMiddlewar')
 const multerConfig = require('../middlewares/imageMulterMiddleware')
+const adminJwtMiddleware = require('../middlewares/adminJwtMiddleware')
 
 const router = express.Router()
 //Unauthorized User
@@ -41,5 +42,9 @@ router.delete('/user-books/:id/remove', jwtMiddleware, bookController.deleteUser
 // userprofile update
 router.put('/user-profile/edit', jwtMiddleware,multerConfig.single('profile'), useController.userProfileEditController)
 
+//admin 
+
+
+router.get('/all-user',adminJwtMiddleware,useController.getAllUsersController)
 
 module.exports = router
