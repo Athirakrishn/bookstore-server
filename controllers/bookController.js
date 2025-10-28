@@ -1,113 +1,140 @@
-const books= require('../models/bookModel')
+const books = require('../models/bookModel')
 
 // add book
-exports.addBookController = async(req,res)=>{
-  console.log("inside addBookController");
-  // console.log(req.body);
-   // console.log(req.files);
-  const {  title,author,noOfPages,imageUrl,price,discountPrice,abstract,publisher,languages,isbn,category
-   } = req.body
-   const userMail=req.payload
- 
-  var uploadImg = []
-  req.files.map(item=>uploadImg.push(item.filename))
+exports.addBookController = async (req, res) => {
+    console.log("inside addBookController");
+    // console.log(req.body);
+    // console.log(req.files);
+    const { title, author, noOfPages, imageUrl, price, discountPrice, abstract, publisher, languages, isbn, category
+    } = req.body
+    const userMail = req.payload
 
-console.log(title,author,noOfPages,imageUrl,price,discountPrice,abstract,publisher,languages,isbn,category,uploadImg,userMail);
-try{
-  const existingBook = await books.findOne({ title, userMail });
-    if (existingBook) {
-      res.status(401).json("You have already added the book");
-    } else {
-      const newBook = new books({
-    title,author,noOfPages,imageUrl,price,discountPrice,abstract,publisher,languages,isbn,category,uploadImg,userMail
-      })
-      await newBook.save()
-      res.status(200).json(newBook)
+    var uploadImg = []
+    req.files.map(item => uploadImg.push(item.filename))
+
+    console.log(title, author, noOfPages, imageUrl, price, discountPrice, abstract, publisher, languages, isbn, category, uploadImg, userMail);
+    try {
+        const existingBook = await books.findOne({ title, userMail });
+        if (existingBook) {
+            res.status(401).json("You have already added the book");
+        } else {
+            const newBook = new books({
+                title, author, noOfPages, imageUrl, price, discountPrice, abstract, publisher, languages, isbn, category, uploadImg, userMail
+            })
+            await newBook.save()
+            res.status(200).json(newBook)
+        }
+
+    } catch (err) {
+        res.status(500).json(err)
     }
-
-}catch(err){
-  res.status(500).json(err)
-}
 
 }
 
 //get home books
-exports.getHomeBooksController = async (req,res)=>{
+exports.getHomeBooksController = async (req, res) => {
     console.log("Inside getHomeBooks");
-    try{
-        const allHomeBooks = await books.find().sort({_id:-1}).limit(4)
+    try {
+        const allHomeBooks = await books.find().sort({ _id: -1 }).limit(4)
         res.status(200).json(allHomeBooks)
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
-  // res.status(200).json("request received!!!")
+    // res.status(200).json("request received!!!")
 }
 //get all books
-exports.getAllBooksController = async (req,res)=>{
+exports.getAllBooksController = async (req, res) => {
     console.log("Inside getAllBooks");
     const searchKey = req.query.search
     const email = req.payload
     const query = {
-      title:{$regex: searchKey,$options: 'i'},
-      userMail:{$ne:email}
+        title: { $regex: searchKey, $options: 'i' },
+        userMail: { $ne: email }
     }
-    try{
+    try {
         const allBooks = await books.find(query)
         res.status(200).json(allBooks)
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
 }
 
 //viewBook
 
-exports.viewBookController = async (req,res)=>{
+exports.viewBookController = async (req, res) => {
     console.log("Inside viewBookController");
-    const {id} = req.params
+    const { id } = req.params
     console.log(id);
-    try{
-        const viewBook = await books.findById({_id:id})
+    try {
+        const viewBook = await books.findById({ _id: id })
         res.status(200).json(viewBook)
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
 }
 
 
 //get all user books 
-exports.getAllUserBookController = async (req,res)=>{
+exports.getAllUserBookController = async (req, res) => {
     console.log("Inside getAllUserController ");
     const email = req.payload
-    try{
-        const allUserBooks = await books.find({userMail:email})
+    try {
+        const allUserBooks = await books.find({ userMail: email })
         res.status(200).json(allUserBooks)
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
 }
 
 //get all user bought books 
-exports.getAllUserBoughtController = async (req,res)=>{
+exports.getAllUserBoughtController = async (req, res) => {
     console.log("Inside getAllUserBoughtController ");
     const email = req.payload
-    try{
-        const allUserBoughtBooks = await books.find({bought:email})
+    try {
+        const allUserBoughtBooks = await books.find({ bought: email })
         res.status(200).json(allUserBoughtBooks)
-    }catch(err){
+    } catch (err) {
         res.status(500).json(err)
     }
 }
 
 //removing user upload books
-exports.deleteUserBookController = async (req,res)=>{
+exports.deleteUserBookController = async (req, res) => {
     console.log("Inside deleteUserBookController");
     //get book id
     const { id } = req.params
     console.log(id);
-    try{
-       await books.findByIdAndDelete({_id:id})
-       res.status(200).json("Book Deleted Successfully...")
-    }catch(err){
+    try {
+        await books.findByIdAndDelete({ _id: id })
+        res.status(200).json("Book Deleted Successfully...")
+    } catch (err) {
         res.status(500).json(err)
+    }
+}
+
+////get all books to admin
+exports.getAllBooksAdminController = async (req, res) => {
+    console.log('Inside getAllBooksAdminController');
+    try {
+        const allAdminBooks = await books.find()
+        res.status(200).json(allAdminBooks)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+
+//update book status
+exports.updateBookStatusController = async (req, res) => {
+    console.log("inside updateBookStatusController");
+    const { _id, title, author, noOfPages, imageUrl, price, discountPrice, abstract, publisher, languages, isbn, category, uploadImg, userMail, bought } = req.body
+    try {
+        const updateBook = await books.findByIdAndUpdate({ _id }, { title, author, noOfPages, imageUrl, price, discountPrice, abstract, publisher, languages, isbn, category, uploadImg, status: "approved", userMail, bought }, { new: true })
+        await updateBook.save()
+        res.status(200).json(updateBook)
+    } catch (err) {
+
+        res.status(200).json(err)
+
     }
 }
