@@ -124,17 +124,16 @@ exports.getAllBooksAdminController = async (req, res) => {
 }
 
 
+
 //update book status
-exports.updateBookStatusController = async (req, res) => {
-    console.log("inside updateBookStatusController");
-    const { _id, title, author, noOfPages, imageUrl, price, discountPrice, abstract, publisher, languages, isbn, category, uploadImg, userMail, bought } = req.body
+exports.updateBookStatusController = async(req,res)=>{
+    console.log('Inside updateBookStatusController');
+    const {_id,title, author, noOfPages, imageUrl, price, discountPrice, abstract, publisher, languages, isbn, category, uploadImages, userMail,bought} = req.body
     try {
-        const updateBook = await books.findByIdAndUpdate({ _id }, { title, author, noOfPages, imageUrl, price, discountPrice, abstract, publisher, languages, isbn, category, uploadImg, status: "approved", userMail, bought }, { new: true })
-        await updateBook.save()
-        res.status(200).json(updateBook)
+        const UpdateBook = await books.findByIdAndUpdate({_id},{title,author,noOfPages,imageUrl,price,discountPrice,abstract,publisher,languages,isbn,category,uploadImages,status:"approved",userMail,bought},{new:true})
+        await UpdateBook.save()
+        res.status(200).json(UpdateBook)
     } catch (err) {
-
-        res.status(200).json(err)
-
+        res.status(500).json(err)
     }
 }
