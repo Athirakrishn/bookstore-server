@@ -45,12 +45,12 @@ router.delete('/user-books/:id/remove', jwtMiddleware, bookController.deleteUser
 // userprofile update
 router.put('/user-profile/edit', jwtMiddleware,multerConfig.single('profile'), useController.userProfileEditController)
 
-//add application
-router.post('/application/add',jwtMiddleware,pdfMulterConfig.single('resume'),applicationController,applicationController.addApplicationController)
+//add-application
+router.post('/application/add',jwtMiddleware,pdfMulterConfig.single('resume'),applicationController.addApplicationController)
 
 
 //admin 
-
+//all user list
 
 router.get('/all-user',adminJwtMiddleware,useController.getAllUsersController)
 
@@ -71,7 +71,7 @@ router.get('/all-jobs',jobController.getAllJobController)
 router.post('/add-job',adminJwtMiddleware,jobController.addJobController)
 //remove job
 router.delete('/job/:id/remove',adminJwtMiddleware,jobController.removeJobController)
-//get application
-router.get('/all-application',adminJwtMiddleware,applicationController.getApplicationController)
+//get-application
+router.get('/all-applications',adminJwtMiddleware,applicationController.getApplicationController)
 
 module.exports = router

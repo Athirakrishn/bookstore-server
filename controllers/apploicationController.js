@@ -20,16 +20,14 @@ try{
 }
 
 }
-//get application
 
-exports.getApplicationController = async(req,res)=>{
- console.log("inside getApplication");
-
-try{
- const applicationDetails = await applications.find()
- res.status(200).json(applications)
-}catch(err){
-  res.status(500).json(err)
-}
-
+//get applications
+exports.getApplicationController = async (req, res) => {
+    console.log('Inside getApplicationController');
+    try {
+        const allApplication = await applications.find()
+        res.status(200).json(allApplication)
+    } catch (err) {
+        res.status(500).json(err)
+    }
 }
